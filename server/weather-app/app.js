@@ -16,12 +16,18 @@
 const request = require('request');
 const url = 'https://api.darksky.net/forecast/4642d9d58cac12bac551253eea99d337/37.8267,-122.4233';
 
-// request({ url: url, json: true }, (error, response) => {
-//   // const data = response.body.currently;
-//   // console.log(`The current temp is ${data.temperature}, there is ${data.precipProbability * 100}% of raining`);
+request({ url: url, json: true }, (error, response) => {
 
-//   console.log(`${response.body.daily.data[0].summary}`);
-// })
+  if (error) {
+    console.log('unable to connect to weather services');
+  } else if (response.body.error) {
+    console.log('unable to find locaiton');
+  } else {
+    console.log(`${response.body.daily.data[0].summary}`);
+
+  }
+
+})
 
 
 // geocoding
@@ -32,7 +38,9 @@ const geoURL = 'https://api.mapbox.com/geocoding/v5/mapbox.places/Los%20Angeles.
 request({ url: geoURL, json: true }, (error, response) => {
 
   if (error) {
-    console.log('uable to connect to weather service');
+    console.log('uable to connect to weather service'); // low level
+  } else if (response.body.features.length === 0) {
+    console.log('unable to find location, try again');
   } else {
     const data = response.body.features[0].center;
     console.log(`longtitude is ${data[0]}, latitude is ${data[1]}`);
