@@ -1,27 +1,42 @@
 /* eslint-disable no-console */
 const express = require('express');
 const path = require('path');
+const hbs = require('hbs');
 
 // console.log(__dirname);
 // console.log(path.join(__dirname, './public'));
 
 const publicDirectory = path.join(__dirname, './public');
+const viewsPath = path.join(__dirname,'./templates/views');
+const partialsPath = path.join(__dirname, './templates/partials');
 
 const app = express();
+
+app.set('view engine', 'hbs');
+app.set('views',viewsPath);
+hbs.registerPartials(partialsPath);
 
 app.use(express.static(publicDirectory));
 
 app.get('', (req, res) => {
-  res.send('<h1>HA</h1>');
+  res.render('index', {
+    title: 'weather app',
+    name: 'yingying'
+  });
 })
 
 app.get('/help', (req, res) => {
-  res.send({ name: 'yingying', gender: 'F' });
+  res.render('help', {
+    title: 'help',
+    name: 'ying'
+  })
 })
 
 
 app.get('/about', (req, res) => {
-  res.send('about');
+  res.render('about', {
+    title: 'about'
+  })
 })
 
 
